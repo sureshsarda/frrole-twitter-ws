@@ -12,6 +12,7 @@ import com.frrole.model.Tweet;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
@@ -30,12 +31,25 @@ public class AwsElasticSearchClient {
 		client = factory.getObject();
 	}
 
-	public List<Tweet> search(String query) throws IOException {
+	public List<Tweet> search(String query, int count) throws IOException {
 
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(count);
 		searchSourceBuilder.query(QueryBuilders.matchQuery("text", query));
 
-		Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(INDEX).addType(TYPE).build();
+		return searchHelper(searchSourceBuilder);
+	}
+
+	public List<Tweet> search(String query) throws IOException {
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(getCount(query));
+		searchSourceBuilder.query(QueryBuilders.matchQuery("text", query));
+
+		return searchHelper(searchSourceBuilder);
+
+	}
+
+	private List<Tweet> searchHelper(SearchSourceBuilder builder) throws IOException {
+		Search search = new Search.Builder(builder.toString()).addIndex(INDEX).addType(TYPE).build();
 
 		SearchResult result = client.execute(search);
 
@@ -44,17 +58,27 @@ public class AwsElasticSearchClient {
 			list.add(item.source);
 		}
 		return list;
+
 	}
 
-	public int getCount() throws IOException {
+	public int getCount(String query) throws IOException {
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(0);
+
+		if (query != null) {
+			searchSourceBuilder.query(QueryBuilders.matchQuery("text", query));
+		}
 		Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(INDEX).addType(TYPE).build();
 		SearchResult result = client.execute(search);
 		return result.getTotal();
 
 	}
-	
-	public void post(Tweet tweet) {
-		System.out.println(tweet);
+
+	public int getTotalCount() throws IOException {
+		return getCount(null);
+	}
+
+	public void post(Tweet tweet) throws IOException {
+		Index index = new Index.Builder(tweet).index(INDEX).type(TYPE).build();
+		client.execute(index);
 	}
 }

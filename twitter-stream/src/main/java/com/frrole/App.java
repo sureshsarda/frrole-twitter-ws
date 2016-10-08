@@ -13,7 +13,7 @@ import com.frrole.twitter.PublicTwitterStream;
  */
 public class App {
 	
-	private static final int MAX_TWEETS = 1000;
+	private static final int MAX_TWEETS = 10;
 
 	public static void main(String[] args) {
 		PublicTwitterStream stream = new PublicTwitterStream();

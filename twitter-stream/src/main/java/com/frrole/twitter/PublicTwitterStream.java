@@ -1,5 +1,6 @@
 package com.frrole.twitter;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.frrole.aws.AwsElasticSearchClient;
@@ -37,7 +38,11 @@ public class PublicTwitterStream {
 
 			public void onStatus(Status status) {
 				Tweet tweet = new Tweet(status.getText());
-				elasticSearchClient.post(tweet);
+				try {
+					elasticSearchClient.post(tweet);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				count += 1;
 				if (count > maxCount) {
 					twitterStream.shutdown();

@@ -17,7 +17,7 @@ public class TweetMapper {
 	public static String asXmlString(List<Tweet> tweets) {
 		StringBuilder sb = new StringBuilder("<Tweets>");
 		for (Tweet tweet : tweets) {
-			sb.append(tweet.asJsonString());
+			sb.append(tweet.asXmlString());
 			sb.append(System.lineSeparator());
 		}
 		sb.append("</Tweets>");
@@ -27,7 +27,7 @@ public class TweetMapper {
 	public static String asCsvString(List<Tweet> tweets) {
 		StringBuilder sb = new StringBuilder();
 		for (Tweet tweet : tweets) {
-			sb.append(tweet.asJsonString());
+			sb.append(tweet.asCsvString());
 			sb.append(System.lineSeparator());
 		}
 		return sb.toString();
