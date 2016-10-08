@@ -12,10 +12,12 @@ import com.frrole.twitter.PublicTwitterStream;
  *
  */
 public class App {
+	
+	private static final int MAX_TWEETS = 1000;
 
 	public static void main(String[] args) {
 		PublicTwitterStream stream = new PublicTwitterStream();
-		stream.run(readKeywords(), 10);
+		stream.run(readKeywords(), MAX_TWEETS);
 	}
 
 	public static List<String> readKeywords() {
