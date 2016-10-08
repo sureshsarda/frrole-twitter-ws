@@ -53,4 +53,8 @@ public class AwsElasticSearchClient {
 		return result.getTotal();
 
 	}
+	
+	public void post(Tweet tweet) {
+		System.out.println(tweet);
+	}
 }
