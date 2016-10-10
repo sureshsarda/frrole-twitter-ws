@@ -24,8 +24,12 @@ public class TweetResource {
 
 	@GET
 	public Response get() {
-		String helpMessage = "Pass paramter to POST endpoints to get results";
-		return Response.ok(helpMessage).build();
+		StringBuilder sb = new StringBuilder("GET is not available.");
+		sb.append("POST");
+		sb.append("Request Body:");
+		sb.append("query (search string),");
+		sb.append("format (XML|JSON|CSV),");
+		return Response.ok(sb.toString()).build();
 	}
 
 	@POST
