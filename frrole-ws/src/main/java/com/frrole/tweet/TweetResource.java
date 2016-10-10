@@ -38,4 +38,16 @@ public class TweetResource {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 	}
+
+	@POST
+	@Path("/count")
+	public Response count(SearchCriterion criterion) {
+		try {
+			int result = impl.count(criterion);
+			return Response.ok(result).build();
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+	}
+
 }

@@ -29,4 +29,8 @@ public class TweetImpl {
 					"Format Specified is not supported. Supported formats are: XML, CSV, JSON");
 		}
 	}
+	
+	public int count(SearchCriterion criterion) throws IOException {
+		return client.getCount(criterion.getQuery());
+	}
 }
